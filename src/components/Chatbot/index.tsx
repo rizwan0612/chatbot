@@ -22,7 +22,7 @@ interface Message {
 }
 
 const ChatInterface: React.FC = () => {
-  const [input, setInput] = useState('');
+  const [prompt, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -33,12 +33,12 @@ const ChatInterface: React.FC = () => {
   useEffect(scrollToBottom, [messages]);
 
   const handleSend = async () => {
-    if (!input.trim()) return;
+    if (!prompt.trim()) return;
 
     // Add user message
     const userMessage: Message = {
       id: Date.now(),
-      content: input,
+      content: prompt,
       isUser: true,
     };
 
@@ -46,19 +46,25 @@ const ChatInterface: React.FC = () => {
     setInput('');
 
     try {
-      const response = await fetch('http://localhost:3002/api/chat', {
+      const response = await fetch('http://localhost:3002/api/generate', { // Adjust if your backend is different
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+            'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ message: input }),
-      });
+        body: JSON.stringify({ prompt }),
+    });
+
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
 
       const data = await response.json();
 
       const botMessage: Message = {
         id: Date.now(),
-        content: data.reply,
+        content: data.response,
         isUser: false,
       };
 
@@ -107,7 +113,7 @@ const ChatInterface: React.FC = () => {
           <TextField
             fullWidth
             variant="outlined"
-            value={input}
+            value={prompt}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleSend()}
             placeholder="Ask about inventory, shipments, or supply chain issues..."
@@ -115,7 +121,7 @@ const ChatInterface: React.FC = () => {
           <IconButton
             color="primary"
             onClick={handleSend}
-            disabled={!input.trim()}
+            disabled={!prompt.trim()}
           >
             <Send />
           </IconButton>
