@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Avatar, Box, TextField, List, ListItem, ListItemText, Paper, IconButton, Typography, InputAdornment } from '@mui/material';
+import { Avatar, Box, TextField, List, ListItem, ListItemText, Paper, IconButton, Typography } from '@mui/material';
 import { Delete, Palette, History, Send, AccountCircle, SmartToy } from '@mui/icons-material';
 import styles from './index.module.scss'; // Import styles
 
