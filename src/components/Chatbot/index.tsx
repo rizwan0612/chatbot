@@ -66,7 +66,7 @@ export default function Chat() {
 
       setMessages(prev => [...prev, newMessage]);
 
-      const response = await fetch('http://localhost:3002/api/chat', {
+      const response = await fetch('http://10.0.092:rizwan/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ sessionId, message: input }),
